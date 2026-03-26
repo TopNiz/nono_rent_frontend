@@ -1,0 +1,23 @@
+[project]
+name = "nono_rent_frontend"
+version = "0.1.0"
+description = "Frontend for nono_rent"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "httpx",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
