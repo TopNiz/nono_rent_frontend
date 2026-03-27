@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Frontend for nono_rent"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi",
+    "fastapi[standard]",
     "uvicorn",
     "jinja2",
 ]
@@ -16,7 +16,7 @@ dev-dependencies = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = []
+packages = ["src"]
 
 [build-system]
 requires = ["hatchling"]
