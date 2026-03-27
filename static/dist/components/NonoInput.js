@@ -1,14 +1,14 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export class NonoInput extends NonoBase {
     constructor() {
         super();
         this.shadowRoot.adoptedStyleSheets.push(NonoInput.styles);
-        this.container = document.createElement('div');
-        this.container.classList.add('nono-input-container');
-        this.label = document.createElement('label');
-        this.input = document.createElement('input');
-        this.error = document.createElement('span');
-        this.error.classList.add('error');
+        this.container = document.createElement("div");
+        this.container.classList.add("nono-input-container");
+        this.label = document.createElement("label");
+        this.input = document.createElement("input");
+        this.error = document.createElement("span");
+        this.error.classList.add("error");
         this.container.appendChild(this.label);
         this.container.appendChild(this.input);
         this.container.appendChild(this.error);
@@ -17,7 +17,7 @@ export class NonoInput extends NonoBase {
         this.addEventListeners();
     }
     static get observedAttributes() {
-        return ['type', 'label', 'placeholder', 'required', 'value', 'error'];
+        return ["type", "label", "placeholder", "required", "value", "error"];
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
@@ -25,26 +25,26 @@ export class NonoInput extends NonoBase {
         }
     }
     updateInput() {
-        const type = this.getAttribute('type') || 'text';
-        const label = this.getAttribute('label') || '';
-        const placeholder = this.getAttribute('placeholder') || '';
-        const required = this.hasAttribute('required');
-        const value = this.getAttribute('value') || '';
-        const error = this.getAttribute('error') || '';
+        const type = this.getAttribute("type") || "text";
+        const label = this.getAttribute("label") || "";
+        const placeholder = this.getAttribute("placeholder") || "";
+        const required = this.hasAttribute("required");
+        const value = this.getAttribute("value") || "";
+        const error = this.getAttribute("error") || "";
         this.input.type = type;
         this.input.placeholder = placeholder;
         this.input.required = required;
         this.input.value = value;
         this.label.textContent = label;
         this.error.textContent = error;
-        this.error.style.display = error ? 'block' : 'none';
+        this.error.style.display = error ? "block" : "none";
     }
     addEventListeners() {
-        this.input.addEventListener('input', () => {
-            this.dispatchEvent(new CustomEvent('input', { detail: { value: this.input.value } }));
+        this.input.addEventListener("input", () => {
+            this.dispatchEvent(new CustomEvent("input", { detail: { value: this.input.value } }));
         });
-        this.input.addEventListener('change', () => {
-            this.dispatchEvent(new CustomEvent('change', { detail: { value: this.input.value } }));
+        this.input.addEventListener("change", () => {
+            this.dispatchEvent(new CustomEvent("change", { detail: { value: this.input.value } }));
         });
     }
     get value() {
@@ -52,7 +52,7 @@ export class NonoInput extends NonoBase {
     }
     set value(val) {
         this.input.value = val;
-        this.setAttribute('value', val);
+        this.setAttribute("value", val);
     }
 }
 NonoInput.styles = NonoBase.css `
@@ -94,5 +94,5 @@ NonoInput.styles = NonoBase.css `
       display: none;
     }
   `;
-customElements.define('nono-input', NonoInput);
+customElements.define("nono-input", NonoInput);
 //# sourceMappingURL=NonoInput.js.map

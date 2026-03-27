@@ -1,7 +1,7 @@
 export declare class NonoBase extends HTMLElement {
     static baseStyles: CSSStyleSheet;
-    static css(strings: TemplateStringsArray, ...values: any[]): CSSStyleSheet;
-    static html(strings: TemplateStringsArray, ...values: any[]): DocumentFragment;
+    static css(strings: TemplateStringsArray, ...values: string[]): CSSStyleSheet;
+    static html(strings: TemplateStringsArray, ...values: string[]): DocumentFragment;
     constructor();
 }
 //# sourceMappingURL=NonoBase.d.ts.map

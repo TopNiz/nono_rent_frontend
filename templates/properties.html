@@ -2,18 +2,26 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propriétés - Nono Rent</title>
-    <script type="module" src="/static/dist/components/NonoBase.js"></script>
-    <script type="module" src="/static/dist/components/NonoButton.js"></script>
-    <script type="module" src="/static/dist/components/NonoInput.js"></script>
-    <script type="module" src="/static/dist/components/NonoForm.js"></script>
-    <script type="module" src="/static/dist/components/NonoTable.js"></script>
-    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
-    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
-    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
+    <script src="/static/dist/index.js" type="module"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <h1>Liste des Propriétés</h1>
-    <nono-table id="properties-table" headers='{{ headers|tojson }}' data='{{ data|tojson }}'></nono-table>
+    <nono-table 
+        headers='{{ headers_json | safe }}' 
+        data='{{ data_json | safe }}'>
+    </nono-table>
 </body>
 </html>

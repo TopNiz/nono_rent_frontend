@@ -1,43 +1,70 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pathlib import Path
+import json
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = Path(__file__).resolve().parent.parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+templates.env.cache = None
+templates.env.bytecode_cache = None
 
 
-@app.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/properties")
+async def properties(request: Request):
+    # Mock data for now
+    properties_list = [
+        {"id": 1, "address": "123 Rue de la Paix", "rent": 1200, "city": "Paris"},
+        {"id": 2, "address": "456 Avenue des Champs", "rent": 1500, "city": "Lyon"},
+    ]
+    headers = ["Adresse", "Loyer (€)", "Ville"]
+    data = [[p["address"], str(p["rent"]), p["city"]] for p in properties_list]
+    return templates.TemplateResponse(
+        request=request,
+        name="properties.html",
+        context={
+            "request": request,
+            "properties": properties_list,
+            "headers_json": json.dumps(headers),
+            "data_json": json.dumps(data),
+        },
+    )
 
 
 @app.get("/tenants")
 async def tenants(request: Request):
     # Mock data
-    tenants = [
+    tenants_list = [
         {"id": 1, "name": "Jean Dupont", "email": "jean@example.com"},
     ]
     return templates.TemplateResponse(
-        "tenants.html", {"request": request, "tenants": tenants}
+        request=request,
+        name="tenants.html",
+        context={"request": request, "tenants": tenants_list},
     )
 
 
 @app.get("/leases")
 async def leases(request: Request):
     # Mock
-    leases = []
+    leases_list = []
     return templates.TemplateResponse(
-        "leases.html", {"request": request, "leases": leases}
+        request=request,
+        name="leases.html",
+        context={"request": request, "leases": leases_list},
     )
 
 
 @app.get("/quittances")
 async def quittances(request: Request):
     # Mock
-    quittances = []
+    quittances_list = []
     return templates.TemplateResponse(
-        "quittances.html", {"request": request, "quittances": quittances}
+        request=request,
+        name="quittances.html",
+        context={"request": request, "quittances": quittances_list},
     )

@@ -1,15 +1,15 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export class NonoButton extends NonoBase {
     constructor() {
         super();
         this.shadowRoot.adoptedStyleSheets.push(NonoButton.styles);
-        this.button = document.createElement('button');
-        this.button.classList.add('nono-button');
+        this.button = document.createElement("button");
+        this.button.classList.add("nono-button");
         this.updateButton();
         this.shadowRoot.appendChild(this.button);
     }
     static get observedAttributes() {
-        return ['text', 'variant', 'disabled', 'size'];
+        return ["text", "variant", "disabled", "size"];
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
@@ -17,10 +17,10 @@ export class NonoButton extends NonoBase {
         }
     }
     updateButton() {
-        const text = this.getAttribute('text') || '';
-        const variant = this.getAttribute('variant') || 'primary';
-        const disabled = this.hasAttribute('disabled');
-        const size = this.getAttribute('size') || 'medium';
+        const text = this.getAttribute("text") || "";
+        const variant = this.getAttribute("variant") || "primary";
+        const disabled = this.hasAttribute("disabled");
+        const size = this.getAttribute("size") || "medium";
         this.button.textContent = text;
         this.button.disabled = disabled;
         this.button.className = `nono-button ${variant} ${size}`;
@@ -83,5 +83,5 @@ NonoButton.styles = NonoBase.css `
       opacity: 0.9;
     }
   `;
-customElements.define('nono-button', NonoButton);
+customElements.define("nono-button", NonoButton);
 //# sourceMappingURL=NonoButton.js.map
