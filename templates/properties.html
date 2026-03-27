@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Nono Rent</title>
+    <title>Propriétés - Nono Rent</title>
     <script type="module" src="/static/dist/components/NonoBase.js"></script>
     <script type="module" src="/static/dist/components/NonoButton.js"></script>
     <script type="module" src="/static/dist/components/NonoInput.js"></script>
@@ -13,7 +13,7 @@
     <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
 </head>
 <body>
-    <h1>Bienvenue sur Nono Rent</h1>
-    <nono-button text="Cliquez-moi"></nono-button>
+    <h1>Liste des Propriétés</h1>
+    <nono-table id="properties-table" headers='{{ headers|tojson }}' data='{{ data|tojson }}'></nono-table>
 </body>
 </html>
