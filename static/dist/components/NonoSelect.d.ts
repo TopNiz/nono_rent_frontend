@@ -1,4 +1,4 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export declare class NonoSelect extends NonoBase {
     static styles: CSSStyleSheet;
     private select;

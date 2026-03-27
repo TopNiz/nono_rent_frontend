@@ -6,13 +6,13 @@ export class NonoBase extends HTMLElement {
         return style;
     }
     static html(strings, ...values) {
-        const template = document.createElement('template');
+        const template = document.createElement("template");
         template.innerHTML = String.raw(strings, ...values);
         return template.content;
     }
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: "open" });
         this.shadowRoot.adoptedStyleSheets = [_a.baseStyles];
     }
 }

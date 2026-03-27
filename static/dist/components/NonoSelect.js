@@ -1,14 +1,14 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export class NonoSelect extends NonoBase {
     constructor() {
         super();
         this.shadowRoot.adoptedStyleSheets.push(NonoSelect.styles);
-        this.container = document.createElement('div');
-        this.container.classList.add('nono-select-container');
-        this.label = document.createElement('label');
-        this.select = document.createElement('select');
-        this.error = document.createElement('span');
-        this.error.classList.add('error');
+        this.container = document.createElement("div");
+        this.container.classList.add("nono-select-container");
+        this.label = document.createElement("label");
+        this.select = document.createElement("select");
+        this.error = document.createElement("span");
+        this.error.classList.add("error");
         this.container.appendChild(this.label);
         this.container.appendChild(this.select);
         this.container.appendChild(this.error);
@@ -17,7 +17,7 @@ export class NonoSelect extends NonoBase {
         this.addEventListeners();
     }
     static get observedAttributes() {
-        return ['label', 'options', 'value', 'required', 'error'];
+        return ["label", "options", "value", "required", "error"];
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
@@ -25,15 +25,15 @@ export class NonoSelect extends NonoBase {
         }
     }
     updateSelect() {
-        const label = this.getAttribute('label') || '';
-        const options = JSON.parse(this.getAttribute('options') || '[]');
-        const value = this.getAttribute('value') || '';
-        const required = this.hasAttribute('required');
-        const error = this.getAttribute('error') || '';
+        const label = this.getAttribute("label") || "";
+        const options = JSON.parse(this.getAttribute("options") || "[]");
+        const value = this.getAttribute("value") || "";
+        const required = this.hasAttribute("required");
+        const error = this.getAttribute("error") || "";
         this.label.textContent = label;
-        this.select.innerHTML = '';
-        options.forEach(option => {
-            const opt = document.createElement('option');
+        this.select.innerHTML = "";
+        options.forEach((option) => {
+            const opt = document.createElement("option");
             opt.value = option.value;
             opt.textContent = option.label;
             this.select.appendChild(opt);
@@ -41,11 +41,11 @@ export class NonoSelect extends NonoBase {
         this.select.value = value;
         this.select.required = required;
         this.error.textContent = error;
-        this.error.style.display = error ? 'block' : 'none';
+        this.error.style.display = error ? "block" : "none";
     }
     addEventListeners() {
-        this.select.addEventListener('change', () => {
-            this.dispatchEvent(new CustomEvent('change', { detail: { value: this.select.value } }));
+        this.select.addEventListener("change", () => {
+            this.dispatchEvent(new CustomEvent("change", { detail: { value: this.select.value } }));
         });
     }
     get value() {
@@ -53,7 +53,7 @@ export class NonoSelect extends NonoBase {
     }
     set value(val) {
         this.select.value = val;
-        this.setAttribute('value', val);
+        this.setAttribute("value", val);
     }
 }
 NonoSelect.styles = NonoBase.css `
@@ -91,5 +91,5 @@ NonoSelect.styles = NonoBase.css `
       display: none;
     }
   `;
-customElements.define('nono-select', NonoSelect);
+customElements.define("nono-select", NonoSelect);
 //# sourceMappingURL=NonoSelect.js.map

@@ -1,17 +1,17 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export class NonoForm extends NonoBase {
     constructor() {
         super();
         this.shadowRoot.adoptedStyleSheets.push(NonoForm.styles);
-        this.form = document.createElement('form');
-        this.form.classList.add('nono-form');
+        this.form = document.createElement("form");
+        this.form.classList.add("nono-form");
         this.shadowRoot.appendChild(this.form);
         this.addEventListeners();
     }
     addEventListeners() {
-        this.form.addEventListener('submit', (e) => {
+        this.form.addEventListener("submit", (e) => {
             e.preventDefault();
-            this.dispatchEvent(new CustomEvent('submit'));
+            this.dispatchEvent(new CustomEvent("submit"));
         });
     }
     submit() {
@@ -29,5 +29,5 @@ NonoForm.styles = NonoBase.css `
       width: 100%;
     }
   `;
-customElements.define('nono-form', NonoForm);
+customElements.define("nono-form", NonoForm);
 //# sourceMappingURL=NonoForm.js.map

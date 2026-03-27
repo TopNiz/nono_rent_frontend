@@ -1,15 +1,15 @@
-import { NonoBase } from './NonoBase.js';
+import { NonoBase } from "./NonoBase.js";
 export class NonoCheckbox extends NonoBase {
     constructor() {
         super();
         this.shadowRoot.adoptedStyleSheets.push(NonoCheckbox.styles);
-        this.container = document.createElement('div');
-        this.container.classList.add('nono-checkbox-container');
-        this.checkbox = document.createElement('input');
-        this.checkbox.type = 'checkbox';
-        this.label = document.createElement('label');
-        this.error = document.createElement('span');
-        this.error.classList.add('error');
+        this.container = document.createElement("div");
+        this.container.classList.add("nono-checkbox-container");
+        this.checkbox = document.createElement("input");
+        this.checkbox.type = "checkbox";
+        this.label = document.createElement("label");
+        this.error = document.createElement("span");
+        this.error.classList.add("error");
         this.container.appendChild(this.checkbox);
         this.container.appendChild(this.label);
         this.container.appendChild(this.error);
@@ -18,7 +18,7 @@ export class NonoCheckbox extends NonoBase {
         this.addEventListeners();
     }
     static get observedAttributes() {
-        return ['label', 'checked', 'required', 'error'];
+        return ["label", "checked", "required", "error"];
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
@@ -26,19 +26,21 @@ export class NonoCheckbox extends NonoBase {
         }
     }
     updateCheckbox() {
-        const label = this.getAttribute('label') || '';
-        const checked = this.hasAttribute('checked');
-        const required = this.hasAttribute('required');
-        const error = this.getAttribute('error') || '';
+        const label = this.getAttribute("label") || "";
+        const checked = this.hasAttribute("checked");
+        const required = this.hasAttribute("required");
+        const error = this.getAttribute("error") || "";
         this.label.textContent = label;
         this.checkbox.checked = checked;
         this.checkbox.required = required;
         this.error.textContent = error;
-        this.error.style.display = error ? 'block' : 'none';
+        this.error.style.display = error ? "block" : "none";
     }
     addEventListeners() {
-        this.checkbox.addEventListener('change', () => {
-            this.dispatchEvent(new CustomEvent('change', { detail: { checked: this.checkbox.checked } }));
+        this.checkbox.addEventListener("change", () => {
+            this.dispatchEvent(new CustomEvent("change", {
+                detail: { checked: this.checkbox.checked },
+            }));
         });
     }
     get checked() {
@@ -47,10 +49,10 @@ export class NonoCheckbox extends NonoBase {
     set checked(val) {
         this.checkbox.checked = val;
         if (val) {
-            this.setAttribute('checked', '');
+            this.setAttribute("checked", "");
         }
         else {
-            this.removeAttribute('checked');
+            this.removeAttribute("checked");
         }
     }
 }
@@ -81,5 +83,5 @@ NonoCheckbox.styles = NonoBase.css `
       display: none;
     }
   `;
-customElements.define('nono-checkbox', NonoCheckbox);
+customElements.define("nono-checkbox", NonoCheckbox);
 //# sourceMappingURL=NonoCheckbox.js.map
