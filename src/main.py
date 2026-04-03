@@ -37,14 +37,11 @@ async def properties(request: Request):
 
 @app.get("/tenants")
 async def tenants(request: Request):
-    # Mock data
-    tenants_list = [
-        {"id": 1, "name": "Jean Dupont", "email": "jean@example.com"},
-    ]
+    # Data loaded client-side via API
     return templates.TemplateResponse(
         request=request,
         name="tenants.html",
-        context={"request": request, "tenants": tenants_list},
+        context={"request": request},
     )
 
 
