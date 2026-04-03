@@ -68,3 +68,12 @@ async def quittances(request: Request):
         name="quittances.html",
         context={"request": request, "quittances": quittances_list},
     )
+
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request},
+    )

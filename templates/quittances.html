@@ -11,9 +11,148 @@
     <script type="module" src="/static/dist/components/NonoSelect.js"></script>
     <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
     <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
+    <script type="module" src="/static/dist/components/NonoNavigationMenu.js"></script>
 </head>
 <body>
+    <nono-navigation-menu></nono-navigation-menu>
     <h1>Liste des Quittances</h1>
-    <p>Page en cours de développement.</p>
+    <nono-button text="Générer une Quittance" id="generate-btn"></nono-button>
+    <nono-table id="quittances-table" headers-json='["ID", "Bail", "Mois", "Année", "Total", "Actions"]' data-json='[]'></nono-table>
+    <div id="generate-form" style="display: none;">
+        <nono-form>
+            <nono-select label="Bail" id="lease-select"></nono-select>
+            <nono-select label="Mois" id="month-select">
+                <option value="1">Janvier</option>
+                <option value="2">Février</option>
+                <option value="3">Mars</option>
+                <option value="4">Avril</option>
+                <option value="5">Mai</option>
+                <option value="6">Juin</option>
+                <option value="7">Juillet</option>
+                <option value="8">Août</option>
+                <option value="9">Septembre</option>
+                <option value="10">Octobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Décembre</option>
+            </nono-select>
+            <nono-input label="Année" type="number" id="year-input"></nono-input>
+            <nono-input label="Montant loyer" type="number" id="rent-input"></nono-input>
+            <nono-input label="Charges" type="number" id="charges-input"></nono-input>
+            <nono-input label="Total" type="number" id="total-input" readonly></nono-input>
+            <nono-button text="Générer" id="submit-generate"></nono-button>
+            <nono-button text="Annuler" id="cancel-generate"></nono-button>
+        </nono-form>
+    </div>
+<script>
+class QuittancesManager extends HTMLElement {
+  constructor() {
+    super();
+    this.quittances = [];
+    this.leases = [];
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = '<slot></slot>';
+    this.loadData();
+  }
+
+  async loadData() {
+    try {
+      const response = await fetch('/api/quittances');
+      this.quittances = await response.json();
+    } catch (e) {
+      this.quittances = [];
+    }
+    try {
+      const response = await fetch('/api/leases');
+      this.leases = await response.json();
+    } catch (e) {
+      this.leases = [];
+    }
+    this.render();
+  }
+
+  render() {
+    const table = document.getElementById('quittances-table');
+    const data = this.quittances.map(q => {
+      const lease = this.leases.find(l => l.id == q.lease_id);
+      const leaseName = lease ? `${lease.tenant_name} - ${lease.property_address}` : q.lease_id;
+      return [q.id, leaseName, `${q.month}/${q.year}`, q.total, '<nono-button text="Exporter PDF" data-id="' + q.id + '"></nono-button>'];
+    });
+    table.setAttribute('data-json', JSON.stringify(data));
+    // Add event listeners for export
+    setTimeout(() => {
+      table.querySelectorAll('nono-button[data-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          this.exportPDF(id);
+        });
+      });
+    }, 0);
+  }
+
+  async exportPDF(id) {
+    const response = await fetch(`/api/quittances/${id}/pdf`);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `quittance_${id}.pdf`;
+    a.click();
+  }
+
+  connectedCallback() {
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      document.getElementById('generate-form').style.display = 'block';
+      this.populateLeaseSelect();
+    });
+    document.getElementById('cancel-generate').addEventListener('click', () => {
+      document.getElementById('generate-form').style.display = 'none';
+    });
+    document.getElementById('rent-input').addEventListener('input', this.calculateTotal.bind(this));
+    document.getElementById('charges-input').addEventListener('input', this.calculateTotal.bind(this));
+    document.getElementById('submit-generate').addEventListener('click', this.generateQuittance.bind(this));
+  }
+
+  populateLeaseSelect() {
+    const select = document.getElementById('lease-select');
+    select.innerHTML = '';
+    this.leases.forEach(lease => {
+      const option = document.createElement('option');
+      option.value = lease.id;
+      option.textContent = `${lease.tenant_name} - ${lease.property_address}`;
+      select.appendChild(option);
+    });
+  }
+
+  calculateTotal() {
+    const rent = parseFloat(document.getElementById('rent-input').value) || 0;
+    const charges = parseFloat(document.getElementById('charges-input').value) || 0;
+    document.getElementById('total-input').value = (rent + charges).toFixed(2);
+  }
+
+  async generateQuittance() {
+    const leaseId = document.getElementById('lease-select').value;
+    const month = document.getElementById('month-select').value;
+    const year = document.getElementById('year-input').value;
+    const rent = document.getElementById('rent-input').value;
+    const charges = document.getElementById('charges-input').value;
+    const total = document.getElementById('total-input').value;
+    try {
+      const response = await fetch('/api/quittances', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lease_id: leaseId, month, year, rent_amount: rent, charges, total })
+      });
+      const newQuittance = await response.json();
+      this.quittances.push(newQuittance);
+      this.render();
+      document.getElementById('generate-form').style.display = 'none';
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+customElements.define('quittances-manager', QuittancesManager);
+</script>
+<quittances-manager></quittances-manager>
 </body>
 </html>

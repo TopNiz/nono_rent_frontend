@@ -5,6 +5,12 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:8000',
   },
+  webServer: {
+    command: 'frontend/start_server.sh',
+    port: 8000,
+    cwd: '.',
+    reuseExistingServer: true,
+  },
   projects: [
     {
       name: 'chromium',
