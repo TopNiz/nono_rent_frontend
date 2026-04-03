@@ -3,6 +3,14 @@
 {% block title %}Baux - Nono Rent{% endblock %}
 
 {% block content %}
-    <h1>Liste des Baux</h1>
-    <p>Page en cours de développement.</p>
+    <h1>Liste des baux</h1>
+    {% if leases %}
+        <p>Les baux sont disponibles.</p>
+    {% else %}
+        <nono-empty-state
+            title="Aucun bail"
+            description="Créez un bail pour commencer le suivi des locations."
+            icon="📄">
+        </nono-empty-state>
+    {% endif %}
 {% endblock %}

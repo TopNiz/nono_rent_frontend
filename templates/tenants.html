@@ -3,6 +3,17 @@
 {% block title %}Locataires - Nono Rent{% endblock %}
 
 {% block content %}
-    <h1>Liste des Locataires</h1>
-    <p>Page en cours de développement.</p>
+    <h1>Liste des locataires</h1>
+    {% if tenants %}
+        <nono-table
+            headers='{{ headers_json | safe }}'
+            data='{{ data_json | safe }}'>
+        </nono-table>
+    {% else %}
+        <nono-empty-state
+            title="Aucun locataire"
+            description="Ajoutez un locataire pour commencer."
+            icon="👤">
+        </nono-empty-state>
+    {% endif %}
 {% endblock %}

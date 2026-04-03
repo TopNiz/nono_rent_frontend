@@ -3,6 +3,14 @@
 {% block title %}Quittances - Nono Rent{% endblock %}
 
 {% block content %}
-    <h1>Liste des Quittances</h1>
-    <p>Page en cours de développement.</p>
+    <h1>Liste des quittances</h1>
+    {% if quittances %}
+        <p>Les quittances sont disponibles.</p>
+    {% else %}
+        <nono-empty-state
+            title="Aucune quittance"
+            description="Les quittances générées apparaîtront ici."
+            icon="🧾">
+        </nono-empty-state>
+    {% endif %}
 {% endblock %}
