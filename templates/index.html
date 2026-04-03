@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Nono Rent</title>
-    <script type="module" src="/static/dist/components/NonoBase.js"></script>
-    <script type="module" src="/static/dist/components/NonoButton.js"></script>
-    <script type="module" src="/static/dist/components/NonoInput.js"></script>
-    <script type="module" src="/static/dist/components/NonoForm.js"></script>
-    <script type="module" src="/static/dist/components/NonoTable.js"></script>
-    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
-    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
-    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Nono Rent{% endblock %}
+
+{% block content %}
     <h1>Bienvenue sur Nono Rent</h1>
     <nono-button text="Cliquez-moi"></nono-button>
-</body>
-</html>
+{% endblock %}
