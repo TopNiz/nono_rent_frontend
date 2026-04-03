@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Locataires - Nono Rent</title>
-    <script type="module" src="/static/dist/components/NonoBase.js"></script>
-    <script type="module" src="/static/dist/components/NonoButton.js"></script>
-    <script type="module" src="/static/dist/components/NonoInput.js"></script>
-    <script type="module" src="/static/dist/components/NonoForm.js"></script>
-    <script type="module" src="/static/dist/components/NonoTable.js"></script>
-    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
-    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
-    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
-</head>
-<body>
-    <h1>Liste des Locataires</h1>
-    <p>Page en cours de développement.</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Locataires - Nono Rent{% endblock %}
+
+{% block content %}
+    <h1>Liste des locataires</h1>
+    {% if tenants %}
+        <nono-table
+            headers='{{ headers_json | safe }}'
+            data='{{ data_json | safe }}'>
+        </nono-table>
+    {% else %}
+        <nono-empty-state
+            title="Aucun locataire"
+            description="Ajoutez un locataire pour commencer."
+            icon="👤">
+        </nono-empty-state>
+    {% endif %}
+{% endblock %}

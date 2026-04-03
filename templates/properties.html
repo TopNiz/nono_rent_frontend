@@ -1,27 +1,11 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propriétés - Nono Rent</title>
-    <script src="/static/dist/index.js" type="module"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Propriétés - Nono Rent{% endblock %}
+
+{% block content %}
     <h1>Liste des Propriétés</h1>
     <nono-table 
         headers='{{ headers_json | safe }}' 
         data='{{ data_json | safe }}'>
     </nono-table>
-</body>
-</html>
+{% endblock %}

@@ -41,10 +41,17 @@ async def tenants(request: Request):
     tenants_list = [
         {"id": 1, "name": "Jean Dupont", "email": "jean@example.com"},
     ]
+    headers = ["Nom", "E-mail"]
+    data = [[tenant["name"], tenant["email"]] for tenant in tenants_list]
     return templates.TemplateResponse(
         request=request,
         name="tenants.html",
-        context={"request": request, "tenants": tenants_list},
+        context={
+            "request": request,
+            "tenants": tenants_list,
+            "headers_json": json.dumps(headers),
+            "data_json": json.dumps(data),
+        },
     )
 
 
@@ -67,4 +74,13 @@ async def quittances(request: Request):
         request=request,
         name="quittances.html",
         context={"request": request, "quittances": quittances_list},
+    )
+
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request},
     )

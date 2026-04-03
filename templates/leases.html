@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Baux - Nono Rent</title>
-    <script type="module" src="/static/dist/components/NonoBase.js"></script>
-    <script type="module" src="/static/dist/components/NonoButton.js"></script>
-    <script type="module" src="/static/dist/components/NonoInput.js"></script>
-    <script type="module" src="/static/dist/components/NonoForm.js"></script>
-    <script type="module" src="/static/dist/components/NonoTable.js"></script>
-    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
-    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
-    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
-</head>
-<body>
-    <h1>Liste des Baux</h1>
-    <p>Page en cours de développement.</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Baux - Nono Rent{% endblock %}
+
+{% block content %}
+    <h1>Liste des baux</h1>
+    {% if leases %}
+        <p>Les baux sont disponibles.</p>
+    {% else %}
+        <nono-empty-state
+            title="Aucun bail"
+            description="Créez un bail pour commencer le suivi des locations."
+            icon="📄">
+        </nono-empty-state>
+    {% endif %}
+{% endblock %}
