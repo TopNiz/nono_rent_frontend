@@ -37,7 +37,7 @@ export class NonoTable extends NonoBase {
                 const tr = document.createElement("tr");
                 row.forEach((cell) => {
                     const td = document.createElement("td");
-                    td.textContent = cell;
+                    td.innerHTML = cell;
                     tr.appendChild(td);
                 });
                 tbody.appendChild(tr);
