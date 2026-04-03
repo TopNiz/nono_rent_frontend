@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propriétés - Nono Rent</title>
-    <script src="/static/dist/index.js" type="module"></script>
+    <script type="module" src="/static/dist/components/NonoBase.js"></script>
+    <script type="module" src="/static/dist/components/NonoButton.js"></script>
+    <script type="module" src="/static/dist/components/NonoInput.js"></script>
+    <script type="module" src="/static/dist/components/NonoForm.js"></script>
+    <script type="module" src="/static/dist/components/NonoTable.js"></script>
+    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
+    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
+    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
+    <script type="module" src="/static/dist/components/NonoNavigationMenu.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,6 +26,7 @@
     </style>
 </head>
 <body>
+    <nono-navigation-menu></nono-navigation-menu>
     <h1>Liste des Propriétés</h1>
     <nono-table 
         headers='{{ headers_json | safe }}' 

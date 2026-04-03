@@ -2,7 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Locataires - Nono Rent</title>
+    <script src="/static/ds/index.js" type="module"></script>
     <script type="module" src="/static/dist/components/NonoBase.js"></script>
     <script type="module" src="/static/dist/components/NonoButton.js"></script>
     <script type="module" src="/static/dist/components/NonoInput.js"></script>
@@ -11,9 +13,191 @@
     <script type="module" src="/static/dist/components/NonoSelect.js"></script>
     <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
     <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
+    <script type="module" src="/static/dist/components/NonoNavigationMenu.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .messages {
+            margin: 1rem 0;
+        }
+        .success-message {
+            color: green;
+        }
+        .error-message {
+            color: red;
+        }
+        .form-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <nono-navigation-menu></nono-navigation-menu>
     <h1>Liste des Locataires</h1>
-    <p>Page en cours de développement.</p>
+    <div class="messages"></div>
+    <nono-button text="Ajouter Locataire" id="add-tenant-btn"></nono-button>
+    <div id="form-container" class="form-container hidden">
+        <h2 id="form-title">Ajouter un Locataire</h2>
+        <nono-form id="tenant-form">
+            <nono-input label="Prénom" name="first_name" required></nono-input>
+            <nono-input label="Nom" name="last_name" required></nono-input>
+            <nono-input label="Email" name="email" type="email" required></nono-input>
+            <nono-input label="Téléphone" name="phone"></nono-input>
+            <nono-textarea label="Adresse" name="address"></nono-textarea>
+            <nono-button text="Annuler" id="cancel-btn"></nono-button>
+            <nono-button text="Ajouter" id="submit-btn" type="submit"></nono-button>
+        </nono-form>
+    </div>
+    <nono-table id="tenants-table"></nono-table>
+
+<script>
+  constructor() {
+    this.apiUrl = 'http://localhost:8001'; // Backend API URL
+    this.tenants = [];
+    this.editingTenant = null;
+    this.messagesDiv = document.querySelector('.messages');
+    this.formContainer = document.getElementById('form-container');
+    this.form = document.getElementById('tenant-form');
+    this.formTitle = document.getElementById('form-title');
+    this.submitBtn = document.getElementById('submit-btn');
+    this.table = document.getElementById('tenants-table');
+    this.init();
+  }
+
+  init() {
+    this.loadTenants();
+    document.getElementById('add-tenant-btn').addEventListener('click', () => this.showForm());
+    document.getElementById('cancel-btn').addEventListener('click', () => this.hideForm());
+    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+  }
+
+  async loadTenants() {
+    try {
+      const response = await fetch(`${this.apiUrl}/tenants/`);
+      if (!response.ok) throw new Error('Failed to load tenants');
+      this.tenants = await response.json();
+      this.renderTable();
+    } catch (error) {
+      this.showMessage('Erreur lors du chargement des locataires', 'error');
+    }
+  }
+
+  renderTable() {
+    const headers = ['Nom', 'Email', 'Téléphone', 'Adresse', 'Actions'];
+    const data = this.tenants.map(tenant => [
+      `${tenant.first_name} ${tenant.last_name}`,
+      tenant.email,
+      tenant.phone || '',
+      tenant.address || '',
+      `<nono-button text="Modifier" data-action="edit" data-id="${tenant.id}"></nono-button>
+       <nono-button text="Supprimer" data-action="delete" data-id="${tenant.id}"></nono-button>`
+    ]);
+    this.table.setAttribute('headers', JSON.stringify(headers));
+    this.table.setAttribute('data', JSON.stringify(data));
+    // Add event listeners to action buttons
+    this.table.addEventListener('click', (e) => {
+      const target = e.target.closest('nono-button');
+      if (!target) return;
+      const action = target.getAttribute('data-action');
+      const id = parseInt(target.getAttribute('data-id'));
+      if (action === 'edit') this.editTenant(id);
+      else if (action === 'delete') this.deleteTenant(id);
+    });
+  }
+
+  showForm(tenant = null) {
+    this.editingTenant = tenant;
+    this.formTitle.textContent = tenant ? 'Modifier le Locataire' : 'Ajouter un Locataire';
+    this.submitBtn.setAttribute('text', tenant ? 'Modifier' : 'Ajouter');
+    if (tenant) {
+      this.form.querySelector('[name="first_name"]').setAttribute('value', tenant.first_name);
+      this.form.querySelector('[name="last_name"]').setAttribute('value', tenant.last_name);
+      this.form.querySelector('[name="email"]').setAttribute('value', tenant.email);
+      this.form.querySelector('[name="phone"]').setAttribute('value', tenant.phone || '');
+      this.form.querySelector('[name="address"]').setAttribute('value', tenant.address || '');
+    } else {
+      this.form.reset();
+    }
+    this.formContainer.classList.remove('hidden');
+  }
+
+  hideForm() {
+    this.formContainer.classList.add('hidden');
+    this.editingTenant = null;
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(this.form);
+    const data = Object.fromEntries(formData);
+    // Validation
+    if (!data.first_name || !data.last_name || !data.email) {
+      this.showMessage('Prénom, Nom et Email sont requis', 'error');
+      return;
+    }
+    try {
+      let response;
+      if (this.editingTenant) {
+        response = await fetch(`${this.apiUrl}/tenants/${this.editingTenant.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } else {
+        response = await fetch(`${this.apiUrl}/tenants/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      }
+      if (!response.ok) throw new Error('Failed to save tenant');
+      this.showMessage(`Locataire ${this.editingTenant ? 'modifié' : 'ajouté'} avec succès`, 'success');
+      this.hideForm();
+      this.loadTenants();
+    } catch (error) {
+      this.showMessage('Erreur lors de la sauvegarde', 'error');
+    }
+  }
+
+  editTenant(id) {
+    const tenant = this.tenants.find(t => t.id === id);
+    if (tenant) this.showForm(tenant);
+  }
+
+  async deleteTenant(id) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce locataire ?')) return;
+    try {
+      const response = await fetch(`${this.apiUrl}/tenants/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete tenant');
+      this.showMessage('Locataire supprimé avec succès', 'success');
+      this.loadTenants();
+    } catch (error) {
+      this.showMessage('Erreur lors de la suppression', 'error');
+    }
+  }
+
+  showMessage(message, type) {
+    this.messagesDiv.innerHTML = `<div class="${type}-message">${message}</div>`;
+    setTimeout(() => this.messagesDiv.innerHTML = '', 5000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new TenantsManager();
+});
+</script>
 </body>
 </html>
