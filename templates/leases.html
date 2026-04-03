@@ -1,78 +1,8 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Baux - Nono Rent</title>
-    <script type="module" src="/static/dist/components/NonoBase.js"></script>
-    <script type="module" src="/static/dist/components/NonoButton.js"></script>
-    <script type="module" src="/static/dist/components/NonoInput.js"></script>
-    <script type="module" src="/static/dist/components/NonoForm.js"></script>
-    <script type="module" src="/static/dist/components/NonoTable.js"></script>
-    <script type="module" src="/static/dist/components/NonoSelect.js"></script>
-    <script type="module" src="/static/dist/components/NonoTextarea.js"></script>
-    <script type="module" src="/static/dist/components/NonoCheckbox.js"></script>
-</head>
-<body>
-    <nono-navigation-menu></nono-navigation-menu>
+{% extends "base.html" %}
+
+{% block title %}Baux - Nono Rent{% endblock %}
+
+{% block content %}
     <h1>Liste des Baux</h1>
     <p>Page en cours de développement.</p>
-<script>
-class NonoNavigationMenu extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this.shadowRoot.innerHTML = `
-      <style>
-        nav {
-          display: flex;
-          gap: 1rem;
-          padding: 1rem;
-          background-color: #f0f0f0;
-        }
-        nono-button.active {
-          font-weight: bold;
-          background-color: #ddd;
-        }
-        @media (max-width: 768px) {
-          nav {
-            flex-direction: column;
-            align-items: stretch;
-          }
-        }
-      </style>
-      <nav>
-        <nono-button text="Accueil"></nono-button>
-        <nono-button text="Propriétés"></nono-button>
-        <nono-button text="Locataires"></nono-button>
-        <nono-button text="Baux"></nono-button>
-        <nono-button text="Quittances"></nono-button>
-      </nav>
-    `;
-    this.updateActive();
-  }
-  updateActive() {
-    const path = window.location.pathname;
-    const paths = ['/', '/properties', '/tenants', '/leases', '/quittances'];
-    const index = paths.indexOf(path);
-    const buttons = this.shadowRoot.querySelectorAll('nono-button');
-    buttons.forEach((btn, i) => {
-      if (i === index) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-  connectedCallback() {
-    const buttons = this.shadowRoot.querySelectorAll('nono-button');
-    const hrefs = ['/', '/properties', '/tenants', '/leases', '/quittances'];
-    buttons.forEach((btn, i) => {
-      btn.addEventListener('click', () => {
-        window.location.href = hrefs[i];
-      });
-    });
-  }
-}
-customElements.define('nono-navigation-menu', NonoNavigationMenu);
-</script>
-</html>
+{% endblock %}
